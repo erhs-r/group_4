@@ -12,3 +12,9 @@ counties_CO <- counties %>%
 head(counties_CO)
 
 COhospitaldata <- read_csv("data/covid19_hospital_data_2020-11-29.csv")
+
+#Comments from Brooke
+#group_by counties
+#mutate and use lag
+##We have to subtract previous cases from the current day
+#US census (tidycensus) has population data
