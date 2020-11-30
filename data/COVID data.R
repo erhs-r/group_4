@@ -1,5 +1,7 @@
 #put COVID Data here
 
+##Hospital data goes to 11/29/2020
+
 library(tidyverse)
 
 counties <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
