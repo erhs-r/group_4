@@ -5,6 +5,10 @@ output:
     orientation: rows
 ---
 
+Introduction {.sidebar}
+This report tells us infomation
+
+-------------------------------------
     
 Row 
 -------------------------------------
