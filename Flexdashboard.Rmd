@@ -6,6 +6,7 @@ output:
 ---
 
 Introduction {.sidebar}
+-------------------------------------
 This report tells us infomation
 
 -------------------------------------
