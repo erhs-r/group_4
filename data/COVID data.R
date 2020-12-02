@@ -8,3 +8,4 @@ counties_CO <- counties %>%
   filter(state == "Colorado")
 
 head(counties_CO)
+
