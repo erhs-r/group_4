@@ -3,6 +3,7 @@ title: "Flex dashboard"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
+    theme: spacelab
 ---
 
 Introduction {.sidebar}
