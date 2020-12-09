@@ -61,7 +61,8 @@ ggplot() + #covid map by rates
   geom_sf(data = cdphe_class, aes(fill = Rate)) +
   facet_wrap(~class) +
   scale_fill_viridis() +
-  theme_map()
+  theme_map() +
+  theme(legend.position="bottom")
 
 
 
