@@ -105,6 +105,7 @@ g4_epi_plot_1 +
 #color by population category instead of by county to match Elizabeth's graphs. 
 
 g4_epi_plot_2 <- county_class %>%
+  na.omit(class) %>% 
   ggplot()+
   geom_line(aes(x = date, y = cases, group = county, col = class)) +
   geom_vline(aes(xintercept = ymd("2020-07-04")), linetype = "dashed", alpha = 0.5) +
@@ -117,8 +118,7 @@ library(plotly)
 library(htmlwidgets)
 
 g4_epi_plot_2_anm <- ggplotly(g4_epi_plot_2)
-
-
+g4_epi_plot_2_anm
 
 
 
