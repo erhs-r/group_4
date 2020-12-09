@@ -7,8 +7,9 @@ library(plotly)
 co_counties <- counties(state = 08) %>% #read in SF files for counties
   rename(county = NAME)
 
-cdphe <- read_csv("Data/CDPHE_COVID19_County-Level_Open_Data_Repository.csv") %>% #CDPHE data for rates
-  rename(county = LABEL)
+cdphe <- read_csv("Data/Colorado_COVID-19_Positive_Cases_and_Rates_of_Infection_by_County_of_Identification.csv") %>% #CDPHE data for rates
+  rename(county = LABEL) %>%
+  slice(1:64)
 
 covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv") %>%
   filter(state == "Colorado") #read in NYT covid data
@@ -46,11 +47,10 @@ county_bins <- tibble(county = c("Larimer", "Mesa", "Weld", "Boulder",
                                 "frontier","frontier","frontier","frontier",
                                 "frontier","frontier","frontier"))
 
-rate_map <- full_join(co_counties, cdphe, by = "county") %>% #join cdphe data to SF
-  filter(Date == "11/11/2020") %>% #filter for Nov 11th
-  filter(Metric == "Rate Per 100,000") #filter for rate
+rate_map <- full_join(co_counties, cdphe, by = "county") #join cdphe data to SF
 
-cdphe_class <- full_join(rate_map, county_bins, by = "county")
+cdphe_class <- full_join(rate_map, county_bins, by = "county") %>%
+  rename(rate = County_Rate_Per_100_000)
 
 # ggplot() + #covid map by raw cases
 #  geom_sf(data = co_counties) +
@@ -59,7 +59,7 @@ cdphe_class <- full_join(rate_map, county_bins, by = "county")
 
 map <- ggplot() + #covid map by rates 
   geom_sf(data = co_counties) +
-  geom_sf(data = cdphe_class, aes(fill = Rate, group = county)) +
+  geom_sf(data = cdphe_class, aes(fill = rate, group = county)) +
   facet_wrap(~class) +
   scale_fill_viridis() +
   theme_map() +
