@@ -2,8 +2,8 @@
 title: "Group 4 - COVID Data Presentation"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: rows
-    theme: spacelab
+    orientation: column
+    theme: sandstone
 ---
 
 
@@ -29,7 +29,7 @@ MAPS
 Column {data-height=650}
 -------------------------------------
     
-### Chart 1
+### COVID Cases by County Classification
     
 ```{r}
 co_counties <- counties(state = 08) %>% #read in SF files for counties
@@ -101,7 +101,7 @@ Epi-plots {data-orientation=columns}
 Column
 -------------------------------------
    
-### Graph 2
+### COVID Cases, Deaths, and Hospitalizations
 
 ```{r}
 # Read in county case/deaths NY times data
@@ -203,7 +203,7 @@ g4_epi_plot_1 +
 Column
 -------------------------------------
 
-### Chart 3
+### Total recorded cases by county
     
 ```{r}
 #Plot of total recorded cases by county (use county_class data so you can color by class)
