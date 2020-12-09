@@ -59,7 +59,7 @@ cdphe_class <- full_join(rate_map, county_bins, by = "county")
 
 map <- ggplot() + #covid map by rates 
   geom_sf(data = co_counties) +
-  geom_sf(data = cdphe_class, aes(fill = Rate)) +
+  geom_sf(data = cdphe_class, aes(fill = Rate, group = county)) +
   facet_wrap(~class) +
   scale_fill_viridis() +
   theme_map() +
@@ -67,3 +67,4 @@ map <- ggplot() + #covid map by rates
 
 anmap <- ggplotly(map)
 anmap
+
