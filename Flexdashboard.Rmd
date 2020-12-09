@@ -1,16 +1,12 @@
 ---
-title: "Flex dashboard"
+title: "Group 4 - COVID Data Presentation"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
     theme: spacelab
 ---
 
-Introduction {.sidebar}
--------------------------------------
-This report tells us infomation
 
--------------------------------------
 
 ```{r load libraries}
 library(tidyverse)
@@ -27,9 +23,10 @@ library(viridis)
 library(ggthemes)
 ```
 
-
+MAPS
+=====================================
     
-Row 
+Column {data-height=650}
 -------------------------------------
     
 ### Chart 1
@@ -95,8 +92,12 @@ ggplot() + #covid map by rates
   scale_fill_viridis() +
   theme_map()
 ```
-   
-Row {.tabset .tabset-fade}
+
+
+Epi-plots {data-orientation=columns}
+=====================================  
+
+Column
 -------------------------------------
    
 ### Graph 2
@@ -197,6 +198,10 @@ g4_epi_plot_1 +
   geom_label(label = "Halloween", size = 3, hjust = 0, vjust = 1)
 ```   
  
+ 
+Column
+-------------------------------------
+
 ### Chart 3
     
 ```{r}
@@ -218,3 +223,16 @@ library(htmlwidgets)
 g4_epi_plot_2_anm <- ggplotly(g4_epi_plot_2)
 g4_epi_plot_2_anm
 ```
+
+
+Summary
+=====================================
+
+We did things.  
+It made graphs.  
+COVID is bad.  
+Wear a mask!
+
+
+
+
