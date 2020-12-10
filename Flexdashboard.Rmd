@@ -39,17 +39,12 @@ Column {data-height=650}
 co_counties <- counties(state = 08, cb = FALSE, resolution = "20m") %>% #read in SF files for counties
   rename(county = NAME)
 
-<<<<<<< HEAD
 ```
 
 ```{r}
-cdphe <- read_csv("Data/CDPHE_COVID19_County-Level_Open_Data_Repository.csv") %>% #CDPHE data for rates
-  rename(county = LABEL)
-=======
 cdphe <- read_csv("Data/Colorado_COVID-19_Positive_Cases_and_Rates_of_Infection_by_County_of_Identification.csv") %>% #CDPHE data for rates
   rename(county = LABEL) %>%
   slice(1:64)
->>>>>>> f8d59af54b4de6612394c009b0635c46debb5c28
 
 covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv") %>%
   filter(state == "Colorado") #read in NYT covid data
@@ -99,11 +94,7 @@ cdphe_class <- full_join(rate_map, county_bins, by = "county") %>%
 
 map <- ggplot() + #covid map by rates 
   geom_sf(data = co_counties) +
-<<<<<<< HEAD
-  geom_sf(data = cdphe_class, aes(fill = Rate, group = county)) +
-=======
   geom_sf(data = cdphe_class, aes(fill = rate, group = county)) +
->>>>>>> f8d59af54b4de6612394c009b0635c46debb5c28
   facet_wrap(~class) +
   scale_fill_viridis() +
   theme_map() +
@@ -111,10 +102,7 @@ map <- ggplot() + #covid map by rates
 
 anmap <- ggplotly(map)
 anmap
-<<<<<<< HEAD
-=======
 
->>>>>>> f8d59af54b4de6612394c009b0635c46debb5c28
 ```
 
 
