@@ -62,7 +62,8 @@ co_deaths <- aggregate(county_new["new_deaths"], by = county_new["date"], sum)
 
 # Read in hospitalization data for CO:
 
-hosp_data <- read_csv("group_4/data/covid19_hospital_data_2020-11-29.csv")
+getwd()
+hosp_data <- read_csv("data/covid19_hospital_data_2020-11-29.csv")
 
 # filter hospital data down to current hospitalization of confirmed covid cases. 
 
@@ -98,11 +99,10 @@ g4_epi_plot_1 <- co_full %>%
 #color by population category instead of by county to match Elizabeth's graphs. 
 
 g4_epi_plot_2 <- county_class %>%
-
+  na.omit %>%
   ggplot() +
-  na.omit(class) %>% 
-  ggplot()+
   geom_line(aes(x = date, y = cases, group = county, col = class)) +
+  labs(x = "Date", y = "Total Cases") +
   theme_classic()
 
 # wrap plot in ggplotly() to animate:
@@ -112,6 +112,21 @@ library(htmlwidgets)
 
 g4_epi_plot_2_anm <- ggplotly(g4_epi_plot_2)
 g4_epi_plot_2_anm
+
+#Plot of rate per 10000 by county (note this only works if loading initial chunks of code 
+#and assigning all objects in flexdashboard)
+
+county_class_rates <- county_class %>%
+  mutate(rate_per_100000 = new_cases/100000)
+
+g4_epi_plot_3 <- county_class_rates %>%
+  na.omit() %>%
+  ggplot() +
+  geom_line(aes(x = date, y = rate_per_100000, group = county, col = class)) +
+  labs(x = "Date", y = "Rate per 100000") +
+  theme_classic()
+
+
 
 
 
