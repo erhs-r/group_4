@@ -185,15 +185,18 @@ hosp_data_conf <- hosp_data %>%
 co_cases_deaths <- full_join(co_cases, co_deaths)
 co_full <- inner_join(co_cases_deaths, hosp_data_conf, by = "date") %>%
   select(1, 2, 3, 9) %>%
-  rename(new_hospitalizations = "value")
+  rename(new_hospitalizations = "value") %>% 
+  rename(Cases = "new_cases") %>% 
+  rename(Deaths = "new_deaths") %>% 
+  rename(Hospitalizations = "new_hospitalizations")
 
 #Plot of cases v deaths v hospitalizations (using aggregated datasets)
 
 g4_epi_plot_1 <- co_full %>%
   ggplot() +
-  geom_line(aes(x = date, y = new_cases, color = "new_cases")) +
-  geom_line(aes(x = date, y = new_deaths, color = "new_deaths")) +
-  geom_line(aes(x = date, y = new_hospitalizations, color = "new_hospitalizations")) +
+  geom_line(aes(x = date, y = Cases, color = "Cases")) +
+  geom_line(aes(x = date, y = Deaths, color = "Deaths")) +
+  geom_line(aes(x = date, y = Hospitalizations, color = "Hospitalizations")) +
   geom_vline(aes(xintercept = ymd("2020-07-04")), linetype = "dashed",
              alpha = 0.5) +
   geom_vline(aes(xintercept = ymd("2020-10-31")), linetype = "dashed",
@@ -204,6 +207,8 @@ g4_epi_plot_1 <- co_full %>%
             hjust = 1.1) +
   labs(x = "Date", y = "Cases, Deaths, and Hospitalizations", color = "Legend") +
   theme_classic() 
+
+g4_epi_plot_1
 ```   
  
  
