@@ -45,9 +45,9 @@ county_bins <- tibble(county = c("Larimer", "Mesa", "Weld", "Boulder",
                                 "frontier","frontier","frontier","frontier",
                                 "frontier","frontier","frontier"))
 
-rate_map <- full_join(co_counties, cdphe, by = "county") %>% #join cdphe data to SF
-  filter(Date == "11/11/2020") %>% #filter for Nov 11th
-  filter(Metric == "Rate Per 100,000") #filter for rate
+rate_map <- full_join(co_counties, cdphe, by = "county") #%>% #join cdphe data to SF
+  #filter(Date == "11/11/2020") %>% #filter for Nov 11th
+  #filter(Metric == "Rate Per 100,000") #filter for rate
 
 cdphe_class <- full_join(rate_map, county_bins, by = "county")
 
@@ -61,7 +61,8 @@ ggplot() + #covid map by rates
   geom_sf(data = cdphe_class, aes(fill = Rate)) +
   facet_wrap(~class) +
   scale_fill_viridis() +
-  theme_map()
+  theme_map() +
+  theme(legend.position="bottom")
 
 
 

@@ -1,34 +1,261 @@
 ---
-title: "Flex dashboard"
+title: "Group 4 - COVID Data Presentation"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: rows
-    theme: spacelab
+    orientation: column
+    theme: sandstone
 ---
 
-Introduction {.sidebar}
--------------------------------------
-This report tells us infomation
-
--------------------------------------
-    
-Row 
--------------------------------------
-    
-### Chart 1
-    
-```{r}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
-   
-Row {.tabset .tabset-fade}
+
+
+```{r load libraries}
+library(tidyverse)
+library(dplyr)
+library(magrittr)
+library(forcats)
+library(ggplot2)
+library(ggthemes)
+library(readr)
+library(lubridate)
+library(tidyverse)
+library(tigris)
+library(viridis)
+library(ggthemes)
+library(plotly)
+library(stringr)
+```
+
+MAPS
+=====================================
+    
+Column {data-height=650}
 -------------------------------------
-   
-### Chart 2
+    
+### COVID Cases by County Classification
+    
+```{r message = FALSE, warning = FALSE, include = FALSE}
+co_counties <- counties(state = 08, cb = FALSE, resolution = "20m") %>% #read in SF files for counties
+  rename(County = NAME)
+
+```
 
 ```{r}
+cdphe <- read_csv("Data/Colorado_COVID-19_Positive_Cases_and_Rates_of_Infection_by_County_of_Identification.csv") %>% #CDPHE data for rates
+  rename(County = LABEL) %>%
+  slice(1:64)
+
+covid <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv") %>%
+  filter(state == "Colorado") #read in NYT covid data
+
+#covid_map <- full_join(co_counties, covid, by = "County") %>% #join NYT data to SF
+  #filter(date == "2020-12-01") #filter for 12-01-2020
+
+county_bins <- tibble(County = c("Larimer", "Mesa", "Weld", "Boulder",
+                                 "Broomfield", "Gilpin", "Adams",
+                                 "Clear Creek", "Denver", "Arapahoe",
+                                 "Jefferson", "Douglas", "Elbert", "Park",
+                                 "Teller", "El Paso", "Pueblo",
+                                 "Logan", "Phillips", "Morgan", "Prowers", 
+                                 "Crowley","Otero", "Grand", "Routt", "Eagle", 
+                                 "Summit","Garfield", "Pitkin", "Lake",
+                                 "Chaffee","Fremont", "Delta", "Montrose",
+                                 "Ouray", "Alamosa","Rio Grande", "Conejos", 
+                                 "Archuleta", "La Plata","Montezuma","Moffat", 
+                                 "Rio Blanco", "Jackson","Gunnison",
+                                 "San Miguel", "Dolores", "San Juan",
+                                 "Hinsdale","Mineral", "Saguache", "Custer", 
+                                 "Huerfano","Costilla", "Las Animas", "Baca",
+                                 "Bent","Kiowa", "Lincoln", "Cheyenne",
+                                 "Kit Carson","Yuma", "Washington", "Sedgwick"),
+                      class = c("urban","urban","urban","urban","urban","urban",
+                                "urban","urban","urban","urban","urban","urban",
+                                "urban","urban","urban","urban","urban", "rural",
+                                "rural","rural","rural","rural","rural","rural",
+                                "rural","rural","rural","rural","rural","rural",
+                                "rural","rural","rural","rural","rural","rural",
+                                "rural","rural","rural","rural","rural", 
+                                "frontier","frontier","frontier","frontier",
+                                "frontier","frontier","frontier","frontier",
+                                "frontier","frontier","frontier","frontier",
+                                "frontier","frontier","frontier","frontier",
+                                "frontier","frontier","frontier","frontier",
+                                "frontier","frontier","frontier")) %>%
+  mutate(Class = str_to_title(class))
+
+rate_map <- full_join(co_counties, cdphe, by = "County") #join cdphe data to SF
+
+cdphe_class <- full_join(rate_map, county_bins, by = "County") %>%
+  rename(Rate = County_Rate_Per_100_000)
+
+# ggplot() + #covid map by raw cases
+#  geom_sf(data = co_counties) +
+#  geom_sf(data = covid_map, aes(fill = cases)) +
+#  scale_fill_viridis()
+
+map <- ggplot() + #covid map by rates 
+  geom_sf(data = co_counties) +
+  geom_sf(data = cdphe_class, aes(fill = Rate, group = County)) +
+  facet_wrap(~Class) +
+  scale_fill_viridis() +
+  theme_map() +
+  theme(legend.position="bottom")
+
+anmap <- ggplotly(map)
+anmap
+
+```
+
+
+Epi-plots {data-orientation=columns}
+=====================================  
+
+Column
+-------------------------------------
+   
+### COVID Cases, Deaths, and Hospitalizations
+
+```{r}
+# Read in county case/deaths NY times data
+
+counties <- read_csv("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv") %>%
+  filter(state == "Colorado")
+
+# use lag() to change values from total # of cases/deaths to daily new cases/deaths:
+
+county_new <- counties %>%
+  group_by(county) %>%
+  arrange(date) %>%
+  mutate(new_cases = cases - lag(cases, default = first(cases))) %>%
+  mutate(new_deaths = deaths - lag(deaths, default = first(deaths)))
+
+# join with Elizabeth's county classification dataframe for use in epi graphs:
+# Note: this is Elizabeth's code.
+
+county_bins <- tibble(county = c("Larimer", "Mesa", "Weld", "Boulder",
+                                 "Broomfield", "Gilpin", "Adams",
+                                 "Clear Creek", "Denver", "Arapahoe",
+                                 "Jefferson", "Douglas", "Elbert", "Park",
+                                 "Teller", "El Paso", "Pueblo",
+                                 "Logan", "Phillips", "Morgan", "Prowers", "Crowley",
+                                 "Otero", "Grand", "Routt", "Eagle", "Summit",
+                                 "Garfield", "Pitkin", "Lake", "Chaffee",
+                                 "Fremont", "Delta", "Montrose", "Ouray", "Alamosa",
+                                 "Rio Grande", "Conejos", "Archuleta", "La Plata",
+                                 "Montezuma","Moffat", "Rio Blanco", "Jackson", 
+                                 "Gunnison","San Miguel", "Dolores", "San Juan",
+                                 "Hinsdale","Mineral", "Saguache", "Custer", "Huerfano",
+                                 "Costilla", "Las Animas", "Baca", "Bent",
+                                 "Kiowa", "Lincoln", "Cheyenne", "Kit Carson",
+                                 "Yuma", "Washington", "Sedgwick"),
+                      class = c("urban","urban","urban","urban","urban","urban",
+                                "urban","urban","urban","urban","urban","urban",
+                                "urban","urban","urban","urban","urban", "rural",
+                                "rural","rural","rural","rural","rural","rural",
+                                "rural","rural","rural","rural","rural","rural",
+                                "rural","rural","rural","rural","rural","rural",
+                                "rural","rural","rural","rural","rural", 
+                                "frontier","frontier","frontier","frontier",
+                                "frontier","frontier","frontier","frontier",
+                                "frontier","frontier","frontier","frontier",
+                                "frontier","frontier","frontier","frontier",
+                                "frontier","frontier","frontier","frontier",
+                                "frontier","frontier","frontier"))
+
+county_class <- full_join(county_new, county_bins, by = "county")
+
+# consolidate data from county info to state info using aggregate():
+
+co_cases <- aggregate(county_new["new_cases"], by = county_new["date"], sum)
+co_deaths <- aggregate(county_new["new_deaths"], by = county_new["date"], sum)
+
+# Read in hospitalization data for CO:
+
+hosp_data <- read_csv("data/covid19_hospital_data_2020-11-29.csv")
+
+# These chunks are code to create a dataframe I didn't end up using:
+
+#hosp_data_2 <- hosp_data %>%
+#  filter(metric == "ICU Hospital Beds in Use" | metric == "Acute Care Hospital Beds in Use") %>%
+#  select(5:7) %>%
+#  mutate(value = as.numeric(value))
+
+#hosp_data_beds <- hosp_data_icu %>%
+#  group_by(metric) %>%
+#  mutate(row = row_number()) %>% #create unique row numbers to avoid duplicates when pivoting
+#  pivot_wider(names_from = metric, values_from = value) %>%
+#  rename(icu_beds = "ICU Hospital Beds in Use", 
+#         act_care_beds = "Acute Care Hospital Beds in Use") %>%
+#  mutate(total_beds = icu_beds + act_care_beds)
+
+# filter hospital data down to current hospitalization of confirmed covid cases. 
+
+hosp_data_conf <- hosp_data %>%
+  filter(description == "Currently Hospitalized" & metric == "Confirmed COVID-19")
+
+#Plot of cases v deaths v hospitalizations (using aggregated datasets)
+
+g4_epi_plot_1 <- ggplot() +
+  geom_line(data = co_cases, aes(x = date, y = new_cases)) +
+  geom_line(data = co_deaths, aes(x = date, y = new_deaths), color = "blue") +
+  geom_line(data = hosp_data_conf, aes(x = date, y = value),  color = "red") +
+  geom_vline(data = co_cases, aes(xintercept = ymd("2020-07-04")), linetype = "dashed",
+             alpha = 0.5) +
+  geom_vline(data = co_cases, aes(xintercept = ymd("2020-10-31")), linetype = "dashed",
+             alpha = 0.5) +
+  labs(x = "Date", y = "Cases, Deaths, and Hospitalizations") +
+  theme_classic() 
+
+g4_epi_plot_1 +
+  geom_label(label = "Fourth of July", size = 3, hjust = 0, vjust = 1) +
+  geom_label(label = "Halloween", size = 3, hjust = 0, vjust = 1)
 ```   
  
-### Chart 3
+ 
+Column
+-------------------------------------
+
+### Total recorded cases by county
     
 ```{r}
+#Plot of total recorded cases by county (use county_class data so you can color by class)
+#color by population category instead of by county to match Elizabeth's graphs. 
+
+g4_epi_plot_2 <- county_class %>%
+  na.omit(class) %>% 
+  ggplot()+
+  geom_line(aes(x = date, y = cases, group = county, col = class)) +
+  geom_vline(aes(xintercept = ymd("2020-07-04")), linetype = "dashed", alpha = 0.5) +
+  geom_vline(aes(xintercept = ymd("2020-10-31")), linetype = "dashed", alpha = 0.5) +
+  theme_classic()
+
+# wrap plot in ggplotly() to animate:
+
+library(plotly)
+library(htmlwidgets)
+
+g4_epi_plot_2_anm <- ggplotly(g4_epi_plot_2)
+g4_epi_plot_2_anm
 ```
+
+### Fitz's second plot
+
+```{r}
+#Put your code here!
+```
+
+
+
+Summary
+=====================================
+
+We did things.  
+It made graphs.  
+COVID is bad.  
+Wear a mask!
+
+
+
+

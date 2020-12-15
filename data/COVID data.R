@@ -14,6 +14,12 @@ head(counties_CO)
 
 COhospitaldata <- read_csv("data/covid19_hospital_data_2020-11-29.csv")
 
+
+#CDPHE data to get population numbers and rates
+
+cdphe <- read_csv("Data/CDPHE_COVID19_County-Level_Open_Data_Repository.csv")
+
+
 #Comments from Brooke
 #group_by counties
 #mutate and use lag
