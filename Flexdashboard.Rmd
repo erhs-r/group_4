@@ -204,6 +204,8 @@ g4_epi_plot_1 <- co_full %>%
             hjust = 1.1) +
   labs(x = "Date", y = "Cases, Deaths, and Hospitalizations", color = "Legend") +
   theme_classic() 
+
+g4_epi_plot_1
 ```   
  
  
