@@ -113,12 +113,10 @@ g4_epi_plot_1 <- co_full %>%
 #color by population category instead of by county to match Elizabeth's graphs. 
 
 g4_epi_plot_2 <- county_class %>%
-<<<<<<< HEAD
+
   ggplot() +
-=======
   na.omit(class) %>% 
   ggplot()+
->>>>>>> 9079e0c30ba85887f61a3d5b47614a9e92e458ff
   geom_line(aes(x = date, y = cases, group = county, col = class)) +
   theme_classic()
 
@@ -127,9 +125,7 @@ g4_epi_plot_2 <- county_class %>%
 library(plotly)
 library(htmlwidgets)
 
-<<<<<<< HEAD
-g4_epi_plot_2_anm <- ggplotly(g4_epi_plot_2) 
-=======
+
 g4_epi_plot_2_anm <- ggplotly(g4_epi_plot_2)
 g4_epi_plot_2_anm
 
