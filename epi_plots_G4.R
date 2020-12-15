@@ -64,21 +64,6 @@ co_deaths <- aggregate(county_new["new_deaths"], by = county_new["date"], sum)
 
 hosp_data <- read_csv("group_4/data/covid19_hospital_data_2020-11-29.csv")
 
-# These chunks are code to create a dataframe I didn't end up using:
-
-#hosp_data_2 <- hosp_data %>%
-#  filter(metric == "ICU Hospital Beds in Use" | metric == "Acute Care Hospital Beds in Use") %>%
-#  select(5:7) %>%
-#  mutate(value = as.numeric(value))
-
-#hosp_data_beds <- hosp_data_icu %>%
-#  group_by(metric) %>%
-#  mutate(row = row_number()) %>% #create unique row numbers to avoid duplicates when pivoting
-#  pivot_wider(names_from = metric, values_from = value) %>%
-#  rename(icu_beds = "ICU Hospital Beds in Use", 
-#         act_care_beds = "Acute Care Hospital Beds in Use") %>%
-#  mutate(total_beds = icu_beds + act_care_beds)
-
 # filter hospital data down to current hospitalization of confirmed covid cases. 
 
 hosp_data_conf <- hosp_data %>%
@@ -125,7 +110,6 @@ g4_epi_plot_2 <- county_class %>%
 library(plotly)
 library(htmlwidgets)
 
-
 g4_epi_plot_2_anm <- ggplotly(g4_epi_plot_2)
 g4_epi_plot_2_anm
 
@@ -136,9 +120,18 @@ g4_epi_plot_2_anm
 
 
 
+# These chunks are code to create a dataframe I didn't end up using:
 
+#hosp_data_2 <- hosp_data %>%
+#  filter(metric == "ICU Hospital Beds in Use" | metric == "Acute Care Hospital Beds in Use") %>%
+#  select(5:7) %>%
+#  mutate(value = as.numeric(value))
 
-
-
->>>>>>> 9079e0c30ba85887f61a3d5b47614a9e92e458ff
+#hosp_data_beds <- hosp_data_icu %>%
+#  group_by(metric) %>%
+#  mutate(row = row_number()) %>% #create unique row numbers to avoid duplicates when pivoting
+#  pivot_wider(names_from = metric, values_from = value) %>%
+#  rename(icu_beds = "ICU Hospital Beds in Use", 
+#         act_care_beds = "Acute Care Hospital Beds in Use") %>%
+#  mutate(total_beds = icu_beds + act_care_beds)
 
