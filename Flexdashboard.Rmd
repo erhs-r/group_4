@@ -240,6 +240,13 @@ g4_epi_plot_2_anm <- ggplotly(g4_epi_plot_2)
 g4_epi_plot_2_anm
 ```
 
+### Fitz's second plot
+
+```{r}
+#Put your code here!
+```
+
+
 
 Summary
 =====================================
