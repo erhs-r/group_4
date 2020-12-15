@@ -62,7 +62,7 @@ co_deaths <- aggregate(county_new["new_deaths"], by = county_new["date"], sum)
 
 # Read in hospitalization data for CO:
 
-hosp_data <- read_csv("data/covid19_hospital_data_2020-11-29.csv")
+hosp_data <- read_csv("group_4/data/covid19_hospital_data_2020-11-29.csv")
 
 # These chunks are code to create a dataframe I didn't end up using:
 
@@ -84,31 +84,37 @@ hosp_data <- read_csv("data/covid19_hospital_data_2020-11-29.csv")
 hosp_data_conf <- hosp_data %>%
   filter(description == "Currently Hospitalized" & metric == "Confirmed COVID-19")
 
+# join dataframes (automatically joins by date for "full_join()")
+
+co_cases_deaths <- full_join(co_cases, co_deaths)
+co_full <- inner_join(co_cases_deaths, hosp_data_conf, by = "date") %>%
+  select(1, 2, 3, 9) %>%
+  rename(new_hospitalizations = "value")
+
 #Plot of cases v deaths v hospitalizations (using aggregated datasets)
 
-g4_epi_plot_1 <- ggplot() +
-  geom_line(data = co_cases, aes(x = date, y = new_cases)) +
-  geom_line(data = co_deaths, aes(x = date, y = new_deaths), color = "blue") +
-  geom_line(data = hosp_data_conf, aes(x = date, y = value),  color = "red") +
-  geom_vline(data = co_cases, aes(xintercept = ymd("2020-07-04")), linetype = "dashed",
+g4_epi_plot_1 <- co_full %>%
+  ggplot() +
+  geom_line(aes(x = date, y = new_cases, color = "new_cases")) +
+  geom_line(aes(x = date, y = new_deaths, color = "new_deaths")) +
+  geom_line(aes(x = date, y = new_hospitalizations, color = "new_hospitalizations")) +
+  geom_vline(aes(xintercept = ymd("2020-07-04")), linetype = "dashed",
              alpha = 0.5) +
-  geom_vline(data = co_cases, aes(xintercept = ymd("2020-10-31")), linetype = "dashed",
+  geom_vline(aes(xintercept = ymd("2020-10-31")), linetype = "dashed",
              alpha = 0.5) +
-  labs(x = "Date", y = "Cases, Deaths, and Hospitalizations") +
+  geom_text(aes(x = ymd("2020-07-04"), label="Fourth of July", y=4000), color = "grey36",
+            hjust = 1.1) +
+  geom_text(aes(x = ymd("2020-10-31"), label="Halloween", y=5000), color = "grey36",
+            hjust = 1.1) +
+  labs(x = "Date", y = "Cases, Deaths, and Hospitalizations", color = "Legend") +
   theme_classic() 
-
-g4_epi_plot_1 +
-  geom_label(label = "Fourth of July", size = 3, hjust = 0, vjust = 1) +
-  geom_label(label = "Halloween", size = 3, hjust = 0, vjust = 1)
 
 #Plot of total recorded cases by county (use county_class data so you can color by class)
 #color by population category instead of by county to match Elizabeth's graphs. 
 
 g4_epi_plot_2 <- county_class %>%
-  ggplot()+
+  ggplot() +
   geom_line(aes(x = date, y = cases, group = county, col = class)) +
-  geom_vline(aes(xintercept = ymd("2020-07-04")), linetype = "dashed", alpha = 0.5) +
-  geom_vline(aes(xintercept = ymd("2020-10-31")), linetype = "dashed", alpha = 0.5) +
   theme_classic()
 
 # wrap plot in ggplotly() to animate:
@@ -116,19 +122,5 @@ g4_epi_plot_2 <- county_class %>%
 library(plotly)
 library(htmlwidgets)
 
-g4_epi_plot_2_anm <- ggplotly(g4_epi_plot_2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+g4_epi_plot_2_anm <- ggplotly(g4_epi_plot_2) 
 
