@@ -269,11 +269,27 @@ g4_epi_plot_3_anm
 Summary
 =====================================
 
-We did things.  
-It made graphs.  
-COVID is bad.  
-Wear a mask!
+**Data Sources:**
 
+Two datasets were used to create this dashboard.  
+  
+New York Times: [here](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv)  
+  
+Colorado Department of Public Health and Environment (CDPHE) COVID-19 County Level Open Data Repository: [here](https://data-cdphe.opendata.arcgis.com/datasets/cdphe-covid19-county-level-open-data-repository)  
+  
+The New York Times database was used to obtain number of COVID-19 cases and deaths by day per Colorado county and to find daily new cases and deaths. The CDPHE database was also used to data on COVID-19 rates per 100,000 by county and hospitalization data by county.  
+  
+**Maps**  
+  
+*COVID Cases by County Classification:* Three maps are presented that organize counties by frontier, rural, and urban. A color-coded scale is provided that indicates COVID-19 cases per 100,000. Hold your cursor over each county to obtain county name and COVID-19 rate per 100,000 people. Rates are for November 11th, 2020.  
+  
+**Epi-Plots**  
+  
+*COVID Cases, Deaths, and Hospitalizations:* This figure depicts Colorado COVID-19 new cases, new deaths, and current hospitalizations over time. The red line corresponds to cases, green to deaths, and blue to current hospitalizations. The curve indicates Fourth of July and Halloween timepoints to highlight differences in cases, deaths, and hospitalizations around these times characterized by increased social interaction. Use this figure to search for temporal associations between time points of interest and trends in COVID-19 cases, deaths, and hospitalizations.  
+  
+*Total recorded cases by county:* This interactive tool allows the user to determine total cases over time in each Colorado county. Line colors correspond to frontier (red), rural (green), or urban (blue). Hold the cursor at any point along a line to see county name and total number of COVID-19 cases up that date. This interactive figure allows users to see associations between frontier, rural, and urban settings and total COVID-19 cases.  
+  
+*Rate per 100000 for 3 counties per class.* This interactive tool provides COVID-19 rate (per 100,000) over time for three counties from each of the three classes. Red lines correspond to frontier counties. Green lines correspond to rural counties. Blue lines correspond to urban settings. Hold the cursor over a line at any point to obtain COVID-19 rate (per 100,000) for that date, county name, and class. This tool allows the user to compare daily COVID-19 rates by class and county
 
 
 
