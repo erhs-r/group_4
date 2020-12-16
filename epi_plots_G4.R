@@ -117,7 +117,12 @@ g4_epi_plot_2_anm
 #and assigning all objects in flexdashboard)
 
 county_class_rates <- county_class %>%
-  mutate(rate_per_100000 = new_cases/100000)
+  mutate(rate_per_100000 = new_cases/100000) %>% 
+  filter(county == c("Lincoln", "Bent", "Kit Carson", "La Plata", "Logan", 
+                     "Crowley", "El Paso", "Weld", "Larimer"))
+#Lincoln, Bent, Kit Carson
+#La Plata, Logan, Crowley
+#El Paso, Weld, Larimer
 
 g4_epi_plot_3 <- county_class_rates %>%
   na.omit() %>%
@@ -126,7 +131,9 @@ g4_epi_plot_3 <- county_class_rates %>%
   labs(x = "Date", y = "Rate per 100000") +
   theme_classic()
 
+g4_epi_plot_3_anm <- ggplotly(g4_epi_plot_3)
 
+g4_epi_plot_3_anm
 
 
 
