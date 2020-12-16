@@ -222,11 +222,10 @@ Column
 #color by population category instead of by county to match Elizabeth's graphs. 
 
 g4_epi_plot_2 <- county_class %>%
-  na.omit(class) %>% 
-  ggplot()+
+  na.omit %>%
+  ggplot() +
   geom_line(aes(x = date, y = cases, group = county, col = class)) +
-  geom_vline(aes(xintercept = ymd("2020-07-04")), linetype = "dashed", alpha = 0.5) +
-  geom_vline(aes(xintercept = ymd("2020-10-31")), linetype = "dashed", alpha = 0.5) +
+  labs(x = "Date", y = "Total Cases") +
   theme_classic()
 
 # wrap plot in ggplotly() to animate:
@@ -238,10 +237,31 @@ g4_epi_plot_2_anm <- ggplotly(g4_epi_plot_2)
 g4_epi_plot_2_anm
 ```
 
-### Fitz's second plot
+### Rate per 100000 for 3 counties per class
 
 ```{r}
-#Put your code here!
+#Plot of rate per 10000 by county (note this only works if loading initial chunks of code 
+#and assigning all objects in flexdashboard)
+
+county_class_rates <- county_class %>%
+  mutate(rate_per_100000 = new_cases/100000) %>% 
+  filter(county == c("Lincoln", "Bent", "Kit Carson", "La Plata", "Logan", 
+                     "Crowley", "El Paso", "Weld", "Larimer"))
+#Lincoln, Bent, Kit Carson
+#La Plata, Logan, Crowley
+#El Paso, Weld, Larimer
+
+g4_epi_plot_3 <- county_class_rates %>%
+  na.omit() %>%
+  ggplot() +
+  geom_line(aes(x = date, y = rate_per_100000, group = county, col = class)) +
+  labs(x = "Date", y = "Rate per 100000") +
+  theme_classic()
+
+g4_epi_plot_3_anm <- ggplotly(g4_epi_plot_3)
+
+g4_epi_plot_3_anm
+
 ```
 
 
