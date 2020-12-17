@@ -266,7 +266,7 @@ g4_epi_plot_3_anm
 
 
 
-Summary
+Graph Summaries
 =====================================
 
 **Data Sources:**
